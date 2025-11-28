@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - AiDia | AI Diabetes Assistant</title>
+    <meta name="description" content="Delete your AiDia account and all associated data.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <div class="logo-icon"><img src="../logo.png" width="40" height="40" alt="AiDia Logo" style="border-radius: 50%;"/></div>
+                AiDia
+            </a>
+            <a href="../index.html" class="back-button">← Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="header">
+            <h1>Delete Account</h1>
+            <p>We're sorry to see you go. Please sign in to delete your account and all associated data.</p>
+        </header>
+
+        <main class="main-content">
+            <div class="card">
+                <div id="authSection" class="auth-section">
+                    <form id="loginForm" class="form">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required placeholder="Enter your password">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="signInBtn">
+                            <span class="btn-text">Sign In</span>
+                            <span class="spinner hidden"></span>
+                        </button>
+
+                        <div id="errorMessage" class="error-message hidden"></div>
+                    </form>
+                </div>
+
+                <div id="deleteSection" class="delete-section hidden">
+                    <div class="highlight-box success">
+                        <h4>✅ Signed in as:</h4>
+                        <p class="info-email" id="userEmail" style="font-weight: 600; color: var(--dark);"></p>
+                    </div>
+
+                    <div class="highlight-box warning">
+                        <h4>⚠️ Warning: This action cannot be undone</h4>
+                        <p>Deleting your account will permanently remove:</p>
+                        <ul style="margin-left: 0; list-style-position: inside;">
+                            <li>Your user profile and authentication credentials</li>
+                            <li>All meal photos and nutrition history</li>
+                            <li>Activity tracking data and HbA1c records</li>
+                            <li>Credits and subscription information</li>
+                            <li>Any other data associated with your account</li>
+                        </ul>
+                    </div>
+
+                    <div class="confirmation-box">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="confirmCheckbox">
+                            <span>I understand that this action is permanent and cannot be reversed</span>
+                        </label>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="deleteBtn" disabled>
+                            <span class="btn-text">Delete My Account</span>
+                            <span class="spinner hidden"></span>
+                        </button>
+                    </div>
+
+                    <div id="deleteError" class="error-message hidden"></div>
+                </div>
+
+                <div id="successSection" class="success-section hidden">
+                    <div class="success-icon">
+                        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="40" cy="40" r="38" fill="#2563eb" opacity="0.1"/>
+                            <circle cx="40" cy="40" r="30" stroke="#2563eb" stroke-width="3"/>
+                            <path d="M28 40L36 48L52 32" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h2>Account Successfully Deleted</h2>
+                    <p>Your account and all associated data have been permanently removed from our systems.</p>
+                    <p class="farewell">Thank you for using AiDia. We hope to see you again in the future!</p>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <p>Need help? Have questions about data deletion?</p>
+                <p>Contact us at: <a href="mailto:support@neuroxes.com">support@neuroxes.com</a></p>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h3 style="color: var(--primary-light); margin-bottom: 1rem;">AiDia</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7);">AI-powered diabetes management for a healthier life.</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--primary-light); margin-bottom: 1rem;">Quick Links</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 0.5rem;"><a href="../index.html" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Home</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="../index.html#features" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Features</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="../privacy-policy.html" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--primary-light); margin-bottom: 1rem;">Contact</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 0.5rem;"><a href="mailto:support@neuroxes.com" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">support@neuroxes.com</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="https://www.neuroxes.com" target="_blank" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">www.neuroxes.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 2rem; text-align: center; color: rgba(255, 255, 255, 0.6);">
+                <p>&copy; 2025 Neuroxes. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;"><strong>Medical Disclaimer:</strong> AiDia is not a medical device and should not replace professional medical advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

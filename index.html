@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiDia - AI Diabetes Assistant | Smart Carb Tracking & Meal Analysis</title>
+    <meta name="description" content="Manage your diabetes with AI-powered food analysis. Instant carb counting, personalized coaching, and smart meal tracking.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon"><img src="logo.png" width="40" height="40" alt="AiDia Logo" style="border-radius: 50%;"/></div>
+                AiDia
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#privacy">Privacy</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="https://play.google.com/store/apps/details?id=com.neuroxes.aidia" class="cta-button" style="color: white;">Download App</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Manage Diabetes Smarter with AI</h1>
+            <p>Instant carb counting, personalized coaching, and smart meal tracking. Take control of your diabetes with AI-powered food analysis.</p>
+            <div class="hero-buttons">
+                <a href="#download" class="cta-button">Get Started Free</a>
+                <a href="#how-it-works" class="secondary-button">See How It Works</a>
+            </div>
+            <div class="hero-image">
+                <svg width="300" height="300" viewBox="0 0 300 300" style="opacity: 0.8;">
+                    <circle cx="150" cy="150" r="120" fill="url(#grad1)" opacity="0.2"/>
+                    <circle cx="150" cy="150" r="90" fill="url(#grad2)" opacity="0.3"/>
+                    <path d="M150 80 L150 120 M150 180 L150 220 M80 150 L120 150 M180 150 L220 150" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="150" cy="150" r="30" fill="#2563eb"/>
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Powerful Features for Better Control</h2>
+        <p class="section-subtitle">Everything you need to manage your diabetes confidently</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📸</div>
+                <h3>AI Food Analysis</h3>
+                <p>Simply snap a photo of your meal and get instant nutritional information including carbs, calories, protein, and more.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Personalized Coaching</h3>
+                <p>Receive AI-powered recommendations tailored to your diabetes profile, insulin type, and health goals.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="color: white;">🏃‍♂️</div>
+                <h3>Activity Tracking</h3>
+                <p>Track your steps and physical activity to calculate carb offset and adjust your meal recommendations.</p>
+            </div>
+            <script>
+                // ensure the "Voice Input" feature icon is white
+                (function(){
+                    document.querySelectorAll('.feature-card').forEach(card => {
+                        const title = card.querySelector('h3');
+                        if (title && title.textContent.trim().toLowerCase() === 'voice input') {
+                            const icon = card.querySelector('.feature-icon');
+                            if (icon) icon.style.color = 'white';
+                        }
+                    });
+                })();
+            </script>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>HbA1c Monitoring</h3>
+                <p>Set and track your HbA1c goals with visual progress indicators and personalized insights.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎙️</div>
+                <h3>Voice Input</h3>
+                <p>Log meals hands-free with voice commands for quick and convenient tracking on the go.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacy First</h3>
+                <p>Your health data stays on your device. We never sell or share your personal information.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <h2 class="section-title">How AiDia Works</h2>
+        <p class="section-subtitle">Get started in three simple steps</p>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Take a Photo</h3>
+                    <p>Snap a picture of your meal or select one from your gallery. Our AI will analyze it instantly.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Get Instant Analysis</h3>
+                    <p>Receive detailed nutritional information including carbs, calories, protein, fats, fiber, and sugar with AI-powered accuracy.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Make Informed Decisions</h3>
+                    <p>Get personalized recommendations based on your diabetes profile, insulin needs, and daily activity to manage your health better.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Section -->
+    <section class="privacy" id="privacy">
+        <h2 class="section-title">Your Privacy Matters</h2>
+        <p class="section-subtitle">We take your data security seriously</p>
+        <div class="privacy-grid">
+            <div class="privacy-card">
+                <div class="privacy-icon">🔐</div>
+                <h3>Local Storage</h3>
+                <p>Your meal photos and health data stay on your device, not our servers.</p>
+            </div>
+            <div class="privacy-card">
+                <div class="privacy-icon">🚫</div>
+                <h3>No Data Selling</h3>
+                <p>We never sell your personal information to third parties. Period.</p>
+            </div>
+            <div class="privacy-card">
+                <div class="privacy-icon">🛡️</div>
+                <h3>HTTPS Encryption</h3>
+                <p>All network communications are secured with industry-standard encryption.</p>
+            </div>
+            <div class="privacy-card">
+                <div class="privacy-icon">✅</div>
+                <h3>Full Control</h3>
+                <p>Export, modify, or delete your data anytime with just a few taps.</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="privacy-policy.html" class="secondary-button">Read Full Privacy Policy</a>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="download">
+        <h2>Ready to Take Control?</h2>
+        <p>Join thousands of people managing their diabetes smarter with AiDia</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="https://play.google.com/store/apps/details?id=com.neuroxes.aidia" class="cta-button">
+                <span style="font-size: 1.5rem; margin-right: 0.5rem;">📱</span>
+                Download on Google Play
+            </a>
+            <a href="#" class="cta-button">
+                <span style="font-size: 1.5rem; margin-right: 0.5rem;">🍎</span>
+                Download on App Store
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AiDia</h3>
+                <p style="color: rgba(255, 255, 255, 0.7);">AI-powered diabetes management for a healthier life.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Product</h3>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="#">Pricing</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul>
+                    <li><a href="mailto:support@neuroxes.com">support@neuroxes.com</a></li>
+                    <li><a href="https://www.neuroxes.com">www.neuroxes.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Neuroxes. All rights reserved. | <strong>Medical Disclaimer:</strong> AiDia is not a medical device and should not replace professional medical advice.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle (basic implementation)
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenu.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+    </script>
+</body>
+</html>
