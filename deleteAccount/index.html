@@ -128,7 +128,7 @@
                 </div>
             </div>
             <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 2rem; text-align: center; color: rgba(255, 255, 255, 0.6);">
-                <p>&copy; 2025 Neuroxes. All rights reserved.</p>
+                <p>&copy; <span id="copyrightYear"></span> Neuroxes. All rights reserved.</p>
                 <p style="margin-top: 0.5rem; font-size: 0.9rem;"><strong>Medical Disclaimer:</strong> AiDia is not a medical device and should not replace professional medical advice.</p>
             </div>
         </div>
@@ -138,5 +138,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Keep footer year automatically up to date
+        document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>

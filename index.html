@@ -179,7 +179,7 @@
                 <span style="font-size: 1.5rem; margin-right: 0.5rem;">📱</span>
                 Download on Google Play
             </a>
-            <a href="#" class="cta-button">
+            <a href="https://apps.apple.com/app/id6761293667" class="cta-button">
                 <span style="font-size: 1.5rem; margin-right: 0.5rem;">🍎</span>
                 Download on App Store
             </a>
@@ -220,7 +220,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 Neuroxes. All rights reserved. | <strong>Medical Disclaimer:</strong> AiDia is not a medical device and should not replace professional medical advice.</p>
+            <p>&copy; <span id="copyrightYear"></span> Neuroxes. All rights reserved. | <strong>Medical Disclaimer:</strong> AiDia is not a medical device and should not replace professional medical advice.</p>
         </div>
     </footer>
 
@@ -256,6 +256,9 @@
         mobileMenu.addEventListener('click', () => {
             navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
+
+        // Keep footer year automatically up to date
+        document.getElementById('copyrightYear').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
