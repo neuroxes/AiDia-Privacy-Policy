@@ -14,9 +14,170 @@
     <style>
         /* ── Reset privacy.css conflicts ── */
         body { background: #f8fafc; }
-        #navbar { position: fixed !important; top: 0; left: 0; right: 0; z-index: 1000; text-align: left; padding: 0; margin: 0; }
         footer { text-align: left; padding: 4rem 2rem 1.5rem; margin-top: 0; }
         footer a { color: inherit; }
+
+        /* ── Reading progress bar ── */
+        #readingProgress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            z-index: 1100;
+            transition: width 0.1s linear;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* ── Navbar redesign ── */
+        #navbar {
+            position: fixed !important;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.88) !important;
+            backdrop-filter: blur(18px) !important;
+            -webkit-backdrop-filter: blur(18px) !important;
+            border-bottom: 1px solid rgba(226,232,240,0.8) !important;
+            box-shadow: 0 1px 24px rgba(15,23,42,0.07) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        #navbar .nav-container {
+            max-width: 1240px;
+            padding: 0 2rem;
+            height: 64px;
+        }
+        #navbar .logo {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            gap: 0.6rem;
+            letter-spacing: -0.01em;
+        }
+        #navbar .logo-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+        }
+
+        /* pill nav links */
+        #navbar .nav-links {
+            gap: 0.25rem;
+            background: #f1f5f9;
+            padding: 0.3rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        #navbar .nav-links li a {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+            padding: 0.4rem 0.85rem;
+            border-radius: 8px;
+            transition: all 0.18s;
+            white-space: nowrap;
+        }
+        #navbar .nav-links li a:hover {
+            color: #1e293b;
+            background: #ffffff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        #navbar .nav-links li a.pp-active {
+            color: #2563eb;
+            background: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 1px 6px rgba(37,99,235,0.15);
+        }
+        #navbar .nav-links li a.nav-cta {
+            background: #2563eb;
+            color: #fff !important;
+            padding: 0.45rem 1.1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+            margin-left: 0.35rem;
+        }
+        #navbar .nav-links li a.nav-cta:hover {
+            background: #1d4ed8 !important;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.38);
+            transform: translateY(-1px);
+        }
+
+        /* page breadcrumb chip */
+        .pp-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2563eb;
+            background: #eff6ff;
+            border: 1px solid rgba(37,99,235,0.18);
+            padding: 0.28rem 0.7rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .pp-breadcrumb svg { flex-shrink: 0; }
+
+        /* ── Mobile hamburger ── */
+        #navbar .mobile-menu {
+            width: 36px; height: 36px;
+            background: #f1f5f9;
+            border-radius: 9px;
+            border: 1px solid #e2e8f0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4.5px;
+            cursor: pointer;
+            padding: 0;
+        }
+        #navbar .mobile-menu span {
+            width: 16px; height: 2px;
+            background: #334155;
+            border-radius: 2px;
+        }
+        #navbar .mobile-menu.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+        #navbar .mobile-menu.open span:nth-child(2) { opacity: 0; }
+        #navbar .mobile-menu.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+        /* ── Mobile nav drawer ── */
+        @media (max-width: 768px) {
+            .privacy-page-body { padding-top: 64px; }
+            #navbar .mobile-menu { display: flex; }
+            #navbar .nav-links {
+                display: none;
+                position: fixed;
+                top: 64px; left: 0; right: 0;
+                background: rgba(255,255,255,0.97);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1rem 1.25rem 1.5rem;
+                gap: 0.3rem;
+                border-radius: 0;
+                border: none;
+                border-bottom: 1px solid #e2e8f0;
+                box-shadow: 0 16px 40px rgba(15,23,42,0.1);
+                z-index: 999;
+            }
+            #navbar .nav-links.mobile-open { display: flex; }
+            #navbar .nav-links li a {
+                padding: 0.7rem 1rem;
+                font-size: 0.95rem;
+                border-radius: 10px;
+            }
+            #navbar .nav-links li a.nav-cta {
+                margin-left: 0;
+                margin-top: 0.4rem;
+                text-align: center;
+                padding: 0.75rem 1rem;
+            }
+            .pp-breadcrumb { display: none; }
+        }
 
         /* ── Privacy page layout ── */
         .privacy-page-body { padding-top: 72px; }
@@ -31,47 +192,63 @@
 
         /* ── Sidebar ── */
         .privacy-sidebar {
-            flex: 0 0 280px;
+            flex: 0 0 260px;
             position: sticky;
-            top: 88px;
-            max-height: calc(100vh - 108px);
+            top: 82px;
+            max-height: calc(100vh - 100px);
             overflow-y: auto;
-            background: #ffffff;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border-radius: 16px;
-            border: 1px solid #e2e8f0;
-            padding: 1.25rem 0;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border: 1px solid rgba(226,232,240,0.9);
+            padding: 1rem;
+            box-shadow: 0 1px 24px rgba(15,23,42,0.07);
         }
         .privacy-sidebar h3 {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #94a3b8;
-            margin-bottom: 0.75rem;
-            padding: 0 1rem;
+            margin-bottom: 0.5rem;
+            padding: 0 0.4rem;
+        }
+        .privacy-sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.3rem;
         }
         .privacy-sidebar nav a {
             display: flex;
             align-items: center;
-            padding: 0.5rem 1rem;
-            font-size: 0.84rem;
+            padding: 0.45rem 0.85rem;
+            font-size: 0.82rem;
             font-weight: 500;
             color: #64748b;
             text-decoration: none;
-            border-left: 3px solid transparent;
-            transition: all 0.15s;
+            border-radius: 8px;
+            border-left: none;
+            transition: all 0.18s;
             line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .privacy-sidebar nav a:hover {
-            color: #1e40af;
-            background: #f1f5f9;
+            color: #1e293b;
+            background: #ffffff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
         }
         .privacy-sidebar nav a.active {
             color: #2563eb;
-            border-left-color: #2563eb;
-            background: #eff6ff;
+            background: #ffffff;
             font-weight: 600;
+            box-shadow: 0 1px 6px rgba(37,99,235,0.15);
         }
         .privacy-sidebar::-webkit-scrollbar { width: 3px; }
         .privacy-sidebar::-webkit-scrollbar-track { background: transparent; }
@@ -96,18 +273,28 @@
 </head>
 <body class="privacy-page-body">
 
-    <!-- ── Navigation (same as index) ── -->
+    <!-- ── Reading progress bar ── -->
+    <div id="readingProgress"></div>
+
+    <!-- ── Navigation ── -->
     <nav id="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <div class="logo-icon"><img src="logo.png" alt="AiDia" width="38" height="38"></div>
-AiDia
+                <div class="logo-icon"><img src="logo.png" alt="AiDia" width="36" height="36"></div>
+                AiDia
             </a>
+
+            <!-- breadcrumb chip (desktop only) -->
+            <span class="pp-breadcrumb">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1L1 6v9h5v-4h4v4h5V6L8 1z" stroke="#2563eb" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                Privacy Policy
+            </span>
+
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html#features">Features</a></li>
                 <li><a href="index.html#how-it-works">How It Works</a></li>
                 <li><a href="index.html#reviews">Reviews</a></li>
-                <li><a href="index.html#privacy">Privacy Policy</a></li>
+                <li><a href="privacy-policy.html" class="pp-active">Privacy Policy</a></li>
                 <li><a href="index.html#download" class="nav-cta">Download Free</a></li>
             </ul>
             <div class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">
@@ -906,6 +1093,13 @@ AiDia
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             navbar.classList.toggle('scrolled', window.scrollY > 50);
+        }, { passive: true });
+
+        // Reading progress bar
+        const progressBar = document.getElementById('readingProgress');
+        window.addEventListener('scroll', () => {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            progressBar.style.width = (window.scrollY / docHeight * 100) + '%';
         }, { passive: true });
 
         // Mobile menu toggle
