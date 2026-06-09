@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="privacy.css">
+    <link rel="icon" href="logo.png" type="image/png">
     <style>
         /* ── Reset privacy.css conflicts ── */
         body { background: #f8fafc; }
@@ -30,7 +31,7 @@
 
         /* ── Sidebar ── */
         .privacy-sidebar {
-            flex: 0 0 220px;
+            flex: 0 0 280px;
             position: sticky;
             top: 88px;
             max-height: calc(100vh - 108px);
@@ -89,6 +90,7 @@
         @media (max-width: 768px) {
             .privacy-layout { flex-direction: column; padding: 1.5rem 1rem; }
             .privacy-sidebar { position: static; flex: none; width: 100%; max-height: none; }
+            .hiw-steps-grid { grid-template-columns: 1fr !important; }
         }
     </style>
 </head>
@@ -105,7 +107,7 @@ AiDia
                 <li><a href="index.html#features">Features</a></li>
                 <li><a href="index.html#how-it-works">How It Works</a></li>
                 <li><a href="index.html#reviews">Reviews</a></li>
-                <li><a href="index.html#privacy">Privacy</a></li>
+                <li><a href="index.html#privacy">Privacy Policy</a></li>
                 <li><a href="index.html#download" class="nav-cta">Download Free</a></li>
             </ul>
             <div class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">
@@ -762,7 +764,7 @@ AiDia
                     <h3>Questions About Privacy?</h3>
                     <p>We're here to help! Contact us anytime about privacy concerns, data requests, or general questions.</p>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div class="hiw-steps-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
                         <div class="highlight-box">
                             <h4>📧 Email</h4>
                             <p><a href="mailto:support@neuroxes.com" style="color: var(--primary); font-weight: 600;">support@neuroxes.com</a></p>
