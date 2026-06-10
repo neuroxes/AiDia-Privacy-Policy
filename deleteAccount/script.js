@@ -195,15 +195,21 @@ deleteBtn.addEventListener('click', async () => {
 // triggered on user.delete (Firebase Auth trigger) for full GDPR compliance.
 // ─────────────────────────────────────────────────────────────
 async function deleteUserData(uid) {
-    await Promise.all([
-        // Main user profile + meals + referral credits + FCM tokens
-        database.ref(`users/${uid}`).remove(),
+    const paths = [
+        `users/${uid}`,
+        `subscription_renewals/${uid}`,
+        `subscription_cancellations/${uid}`,
+        `referral_pending/${uid}`,
+    ];
 
-        // Subscription history nodes (rules explicitly allow user to delete own)
-        database.ref(`subscription_renewals/${uid}`).remove(),
-        database.ref(`subscription_cancellations/${uid}`).remove(),
+    // Run all deletions independently — a missing/empty node is not an error
+    const results = await Promise.allSettled(
+        paths.map(path => database.ref(path).remove())
+    );
 
-        // Referral pending rewards queued for this user (as referrer)
-        database.ref(`referral_pending/${uid}`).remove(),
-    ]);
+    // If any deletion was rejected (not just "node didn't exist"), throw so the UI shows the error
+    const failures = results.filter(r => r.status === 'rejected');
+    if (failures.length > 0) {
+        throw new Error(failures.map(f => f.reason?.message || f.reason).join('; '));
+    }
 }

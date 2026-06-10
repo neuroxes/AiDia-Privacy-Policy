@@ -1,0 +1,322 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    // -----------------------------
+    // ADMIN NODE
+    // -----------------------------
+    "admin": {
+      // adConfig: toggles/credits — readable by anyone (non-secret); only admin writes.
+      "adConfig": {
+        ".read": true,
+        ".write": "auth != null && auth.token.email == 'admin@neuroxes.com'"
+      },
+      // adStats: admin reads aggregate; authenticated clients may only increment counters (see AdminService).
+      "adStats": {
+        ".read": "auth != null && auth.token.email == 'admin@neuroxes.com'",
+        "totalRewardedAdsShown": {
+          ".write": "auth != null && (auth.token.email == 'admin@neuroxes.com' || (!data.exists() && newData.isNumber() && newData.val() == 1) || (data.exists() && newData.isNumber() && newData.val() == data.val() + 1))"
+        },
+        "totalInterstitialAdsShown": {
+          ".write": "auth != null && (auth.token.email == 'admin@neuroxes.com' || (!data.exists() && newData.isNumber() && newData.val() == 1) || (data.exists() && newData.isNumber() && newData.val() == data.val() + 1))"
+        },
+        "totalRewardedInterstitialAdsShown": {
+          ".write": "auth != null && (auth.token.email == 'admin@neuroxes.com' || (!data.exists() && newData.isNumber() && newData.val() == 1) || (data.exists() && newData.isNumber() && newData.val() == data.val() + 1))"
+        },
+        "totalCreditsAwarded": {
+          ".write": "auth != null && (auth.token.email == 'admin@neuroxes.com' || (!data.exists() && newData.isNumber() && newData.val() <= 100) || (data.exists() && newData.isNumber() && newData.val() >= data.val() && newData.val() <= data.val() + 100))"
+        },
+        "lastUpdated": {
+          ".write": "auth != null && (auth.token.email == 'admin@neuroxes.com' || (newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}T/)))"
+        }
+      }
+    },
+
+    // -----------------------------
+    // USERS NODE
+    // -----------------------------
+    "users": {
+      ".indexOn": ["purchaseToken"],
+      "$userId": {
+        // Allow authenticated user to read/write their own data
+        // Admin can read/write all users
+        ".read": "auth != null && (auth.uid === $userId || auth.token.email == 'admin@neuroxes.com')",
+        ".write": "auth != null && (auth.uid === $userId || auth.token.email == 'admin@neuroxes.com')",
+
+        "meals": {
+          "$mealId": {
+            ".validate": "!newData.exists() || (newData.hasChildren(['id', 'name', 'dateTime', 'syncedAt']) && newData.child('id').isString() && newData.child('name').isString() && newData.child('dateTime').isString() && newData.child('syncedAt').isNumber())"
+          }
+        },
+
+        "referral": {
+          "code": {
+            ".validate": "!newData.exists() || (newData.isString() && (newData.val().matches(/^[0-9]{6}$/) || newData.val().matches(/^[A-Z0-9]{8}$/)))"
+          },
+          "successfulReferrals": {
+            ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000)"
+          },
+          "creditsEarned": {
+            ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000)"
+          }
+        }
+      }
+    },
+
+    // -----------------------------
+    // DEVICES NODE
+    // -----------------------------
+    "devices": {
+      ".read": false,
+      ".write": false,
+      "$deviceId": {
+        // Device IDs from app are sanitized and may include letters, digits, _ and -
+        // (iOS identifierForVendor is UUID-like with hyphens).
+        ".read": "$deviceId.matches(/^[A-Za-z0-9_-]{8,128}$/)",
+        ".write": false,
+        "credits": {
+          // Allow unauthenticated per-device credits read/write,
+          // but strictly validate structure and value types.
+          ".read": "$deviceId.matches(/^[A-Za-z0-9_-]{8,128}$/)",
+          ".write": "$deviceId.matches(/^[A-Za-z0-9_-]{8,128}$/)",
+          ".validate": "newData.hasChildren(['used', 'lastResetDate'])",
+
+          // used must exist and be a non-negative integer.
+          "used": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+          },
+
+          // YYYY-MM-DD format.
+          "lastResetDate": {
+            ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/)"
+          },
+
+          // Optional fields written by app.
+          "createdAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "subscription": {
+            ".validate": "newData.isString() && (newData.val() == 'free' || newData.val() == 'standard' || newData.val() == 'pro')"
+          },
+
+          // Prevent unexpected fields under credits.
+          "$other": {
+            ".validate": false
+          }
+        },
+
+        "meals": {
+          "$mealId": {
+            ".read": "$deviceId.matches(/^[A-Za-z0-9_-]{8,128}$/)",
+            ".write": "$deviceId.matches(/^[A-Za-z0-9_-]{8,128}$/)",
+            ".validate": "!newData.exists() || (newData.hasChildren(['id', 'name', 'dateTime', 'syncedAt']) && newData.child('id').isString() && newData.child('name').isString() && newData.child('dateTime').isString() && newData.child('syncedAt').isNumber())"
+          }
+        }
+      }
+    },
+
+    // -----------------------------
+    // PURCHASE TOKENS NODE
+    // -----------------------------
+    "purchase_tokens": {
+      "$purchaseId": {
+        // Allow authenticated users to:
+        // 1. Read purchase tokens that belong to them (data exists and userId matches)
+        // 2. Check if a purchase token exists (data doesn't exist) - needed for new purchases
+        // 3. Admin can read all purchase tokens
+        // Note: Users cannot read tokens that belong to other users (privacy protection)
+        ".read": "auth != null && (!data.exists() || data.child('userId').val() === auth.uid || auth.token.email == 'admin@neuroxes.com')",
+        
+        // Allow authenticated users to write their own purchase tokens
+        // Users can only write if:
+        // - Token doesn't exist yet (new purchase), OR
+        // - Token exists and belongs to them (update), OR
+        // - User is admin
+        ".write": "auth != null && (!data.exists() || data.child('userId').val() === auth.uid || auth.token.email == 'admin@neuroxes.com')"
+      }
+    },
+
+    // -----------------------------
+    // SUBSCRIPTION RENEWALS NODE
+    // -----------------------------
+    "subscription_renewals": {
+      "$userId": {
+        // Users can read their own renewal history
+        // Admin can read all renewal history
+        // Admin can write.
+        // Users can only delete their own node during account deletion.
+        ".read": "auth != null && (auth.uid === $userId || auth.token.email == 'admin@neuroxes.com')",
+        ".write": "auth != null && (auth.token.email == 'admin@neuroxes.com' || (auth.uid === $userId && !newData.exists()))"
+      }
+    },
+
+    // -----------------------------
+    // SUBSCRIPTION CANCELLATIONS NODE
+    // -----------------------------
+    "subscription_cancellations": {
+      "$userId": {
+        // Users can read their own cancellation history
+        // Admin can read all cancellation history
+        // Admin can write.
+        // Users can only delete their own node during account deletion.
+        ".read": "auth != null && (auth.uid === $userId || auth.token.email == 'admin@neuroxes.com')",
+        ".write": "auth != null && (auth.token.email == 'admin@neuroxes.com' || (auth.uid === $userId && !newData.exists()))"
+      }
+    },
+
+    // -----------------------------
+    // REFERRAL NODE (Refer a Friend)
+    // -----------------------------
+    // Code lookup: referral_codes/{CODE} -> ownerUid
+    // One redemption per user: referral_redemptions/{redeemerUid}
+    // Referrer rewards queued until they open Refer screen: referral_pending/{referrerUid}/{redeemerUid}
+    "referral_codes": {
+      // App reads a single code path: referral_codes/{CODE}
+      "$code": {
+        ".read": "auth != null",
+        ".write": "auth != null && !data.exists() && newData.child('ownerUid').val() === auth.uid && newData.child('code').val() === $code && ($code.matches(/^[0-9]{6}$/) || $code.matches(/^[A-Z0-9]{8}$/)) && newData.child('createdAt').isNumber()"
+      }
+    },
+
+    "referral_redemptions": {
+      // App reads referral_redemptions/{redeemerUid} (own uid only)
+      "$redeemerUid": {
+        ".read": "auth != null && (auth.uid === $redeemerUid || auth.token.email == 'admin@neuroxes.com')",
+        ".write": "auth != null && auth.uid === $redeemerUid && !data.exists() && newData.hasChildren(['code', 'referrerUid', 'redeemedAt']) && newData.child('referrerUid').val() !== auth.uid && root.child('referral_codes').child(newData.child('code').val()).child('ownerUid').val() === newData.child('referrerUid').val() && newData.child('refereeCredits').isNumber() && newData.child('refereeCredits').val() > 0 && newData.child('refereeCredits').val() <= 20 && newData.child('referrerCredits').isNumber() && newData.child('referrerCredits').val() > 0 && newData.child('referrerCredits').val() <= 20 && newData.child('redeemedAt').isNumber()"
+      }
+    },
+
+    "referral_pending": {
+      // App lists children via .get() on referral_pending/{referrerUid} — parent needs .read
+      "$referrerUid": {
+        ".read": "auth != null && (auth.uid === $referrerUid || auth.token.email == 'admin@neuroxes.com')",
+        // Allow referrer to delete their entire pending node during account deletion
+        ".write": "auth != null && auth.uid === $referrerUid && !newData.exists()",
+        "$redeemerUid": {
+          ".read": "auth != null && (auth.uid === $referrerUid || auth.uid === $redeemerUid || auth.token.email == 'admin@neuroxes.com')",
+          ".write": "auth != null && (auth.token.email == 'admin@neuroxes.com' || (auth.uid === $redeemerUid && $referrerUid !== auth.uid && !data.exists() && newData.hasChildren(['credits', 'redeemedAt']) && newData.child('credits').isNumber() && newData.child('credits').val() > 0 && newData.child('credits').val() <= 20 && newData.child('redeemedAt').isNumber()) || (auth.uid === $referrerUid && data.exists() && !newData.exists()))"
+        }
+      }
+    },
+
+    // -----------------------------
+    // DOCTOR CONNECT WAITLIST (Connect with Diabetologists — coming soon)
+    // -----------------------------
+    "doctor_connect_waitlist": {
+      "$emailKey": {
+        ".read": "auth != null && auth.token.email == 'admin@neuroxes.com'",
+        ".write": "!data.exists() && $emailKey.matches(/^[A-Za-z0-9_@.-]{3,256}$/) && newData.hasChildren(['email', 'createdAt', 'source']) && newData.child('email').isString() && newData.child('email').val().matches(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/) && newData.child('createdAt').isNumber() && newData.child('source').isString() && newData.child('source').val() === 'connect_doctors_screen' && (!newData.hasChild('uid') || (auth != null && newData.child('uid').val() === auth.uid))"
+      }
+    },
+
+    // -----------------------------
+    // FEATURE REQUESTS (Request a Feature)
+    // -----------------------------
+    "feature_requests": {
+      ".read": true,
+      ".indexOn": ["createdAt", "upvoteCount", "commentCount"],
+      "$requestId": {
+        ".write": "auth != null && !data.exists() && newData.child('authorUid').val() === auth.uid && newData.child('id').val() === $requestId && newData.child('ticketId').isString() && newData.child('ticketId').val().matches(/^FR-[A-Z0-9]{6,12}$/) && newData.child('title').isString() && newData.child('title').val().length > 0 && newData.child('title').val().length <= 120 && newData.child('description').isString() && newData.child('description').val().length > 0 && newData.child('description').val().length <= 2000 && newData.child('authorName').isString() && newData.child('authorName').val().length > 0 && newData.child('authorName').val().length <= 120 && newData.child('createdAt').isNumber() && newData.child('upvoteCount').val() === 0 && newData.child('commentCount').val() === 0 && (!newData.hasChild('authorPhotoUrl') || newData.child('authorPhotoUrl').isString())",
+        "upvoteCount": {
+          ".write": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000 && (!data.exists() || newData.val() === data.val() + 1 || newData.val() === data.val() - 1 || newData.val() === data.val())"
+        },
+        "commentCount": {
+          ".write": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000 && (!data.exists() || newData.val() === data.val() + 1 || newData.val() === data.val())"
+        }
+      }
+    },
+
+    "feature_request_upvotes": {
+      ".read": true,
+      "$requestId": {
+        "users": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && (!newData.exists() || (newData.hasChild('at') && newData.child('at').isNumber()))"
+          }
+        },
+        "devices": {
+          "$deviceId": {
+            ".write": "$deviceId.matches(/^[A-Za-z0-9_-]{8,128}$/) && (!newData.exists() || (newData.hasChild('at') && newData.child('at').isNumber()))"
+          }
+        }
+      }
+    },
+
+    "feature_request_comments": {
+      ".read": true,
+      "$requestId": {
+        "$commentId": {
+          ".write": "!data.exists() && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 1000 && newData.child('createdAt').isNumber() && newData.child('authorName').isString() && newData.child('authorName').val().length > 0 && newData.child('authorName').val().length <= 120 && (!newData.hasChild('authorPhotoUrl') || newData.child('authorPhotoUrl').isString()) && ((auth != null && newData.hasChild('authorUid') && newData.child('authorUid').val() === auth.uid && !newData.hasChild('authorDeviceId')) || (!newData.hasChild('authorUid') && newData.hasChild('authorDeviceId') && newData.child('authorDeviceId').isString() && newData.child('authorDeviceId').val().matches(/^[A-Za-z0-9_-]{8,128}$/)))"
+        }
+      }
+    }
+  }
+}
+
+
+Take control of your daily routine with AiDia — an intelligent assistant that combines AI with practical tools to help you log meals, track activity, and build better habits.
+
+AI Food Analysis
+Photograph meals for instant AI-powered estimates
+Log by text or voice — no photo needed
+Multi-image support for better accuracy
+Serving-size adjustment with instant recalculation
+AI-assigned and manual labels for easy categorization
+Personalized suggestions based on your profile and progress
+Location-aware suggestions for culturally relevant meals
+
+Meal Management
+Full meal history with search and filtering
+Edit details, notes, serving size, and images
+Detailed macro and nutrient breakdown per meal
+
+Progress & Reports
+Visual charts for intake and nutrient trends
+Weekly summary cards and highlights
+Export detailed meal reports as PDF
+Monitor daily intake versus your personal target
+
+Personal Profile & Goals
+Set daily targets and personal goals
+Log key readings and track progress over time
+AI-powered calorie goal calculator
+
+AI Coach
+Multi-thread AI chat for day-to-day guidance
+Recommendations based on your logged meals, patterns, profile, and activity
+Practical coaching focused on real daily decisions
+
+Physical Activity
+Step tracking with distance and calorie estimates
+Full exercise library with guided routines
+Activity stats with badges, streaks, and weekly progress
+
+Story-Based Walking Motivation
+Audio stories that unlock as you reach step goals
+Music for workouts
+
+Reminders & Notifications
+Configurable daily reminders for hydration, check-ins, and meal timing
+Weekly summary and activity alerts
+
+Community & News
+Curated news feed
+Browse, upvote, and comment on community requests
+Refer friends and earn rewards
+
+Subscriptions & Credits
+Free usage with limited analyses
+Paid plans and credit packs for higher usage
+Rewarded ads for extra credits
+Core features available without an account
+
+Privacy & Data
+Data stored locally on your device, with optional cloud sync
+AI features only process input when actively used
+Manage or delete your data in-app
+
+AiDia is a self-management tool and does not replace professional advice.
